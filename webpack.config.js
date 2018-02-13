@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 module.exports = {
@@ -18,8 +19,21 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
-      } //,
-      // { test: /\.css$/, loader: "style!css" },
+      },
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [{
+            loader: 'css-loader',
+            query: {
+              sourceMap: true,
+              minimize: true
+            }
+          }]
+        }),
+        exclude: /node_modules/,
+      }
       // {test: /\.less/,loader: 'style-loader!css-loader!less-loader'}
     ]
   },
@@ -28,6 +42,10 @@ module.exports = {
       root: __dirname,
       verbose: true,
       dry: false
+    }),
+    new ExtractTextPlugin({
+      filename: '[name].css',
+      allChunks: true,
     }),
     new webpack.HotModuleReplacementPlugin(),
   ]

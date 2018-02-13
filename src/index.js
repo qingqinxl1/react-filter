@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import './index.css';
 
 // 产品标题
 class ProductCategory extends React.Component {
